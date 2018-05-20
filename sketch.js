@@ -27,8 +27,18 @@ function draw(){
   getData();
  //clear();
  }
-
+ //...................................
+ function clear_window()
+ {
+   fill('black');
+   rect(604,0,1196,600,20);
+   fill('blue');
+   rect(0,0,596,600,20);
+ }
+ //...................................
 function draw_Data(data) {
+  //.........clear_window
+  clear_window();
   //.................................................scan_data
   var scan_data = data.data.scan_data;
   //print(scan_data);
@@ -55,7 +65,25 @@ function draw_Data(data) {
 
 }
 function getData(){
-  loadJSON("results.json", draw_Data);
+  $.ajax({
+                   type: "POST",
+                   url: 'http://localhost/Viewer/viewer.php',
+                   data: { new :1},
+                   success: function(data)
+                   {
+                     //print(data);
+                     try {
+                       var obj = JSON.parse(data);
+                       draw_Data(obj);
+                     }
+                     catch (e) {
+                         //print("No new  Data !");
+                     }
+                     //loadJSON(data, draw_Data);
+                    }
+
+               });
+  //loadJSON("results.json", draw_Data);
 }
 //.............................................................draw_position
 function position_draw(position,stddv,canvas_extents,world_extents){
